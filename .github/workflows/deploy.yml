@@ -15,11 +15,9 @@ jobs:
         uses: actions/checkout@v3
 
       # 2. 获取 Git 提交哈希
-      # - name: Get Git commit hash
-      #   id: git-hash
-      #   run: |
-      #     GIT_HASH=$(git rev-parse --short HEAD)
-      #     echo "GIT_HASH=${GIT_HASH}" >> $GITHUB_ENV
+      - name: Get Git commit hash
+        id: git-hash
+        run: echo "GIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       # 3. 设置 Docker：登录阿里云镜像仓库
       - name: Log in to Alibaba Cloud Container Registry
@@ -32,7 +30,7 @@ jobs:
           REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
           NAMESPACE: ${{ secrets.DOCKER_NAMESPACE }}
           IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ github.ref_name }}-${{ env.GIT_HASH }}
         run: |
           docker build -t $REGISTRY/$NAMESPACE/$IMAGE_NAME:$TAG .
           docker push $REGISTRY/$NAMESPACE/$IMAGE_NAME:$TAG
