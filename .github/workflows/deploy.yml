@@ -29,9 +29,9 @@ jobs:
       # 4. 构建并推送 Docker 镜像到阿里云
       - name: Build and push Docker image
         env:
-          REGISTRY: registry.cn-hangzhou.aliyuncs.com
-          NAMESPACE: k_frontend
-          IMAGE_NAME: web
+          REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+          NAMESPACE: ${{ secrets.DOCKER_NAMESPACE }}
+          IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
           TAG: ${{ github.ref_name }}
         run: |
           docker build -t $REGISTRY/$NAMESPACE/$IMAGE_NAME:$TAG .
